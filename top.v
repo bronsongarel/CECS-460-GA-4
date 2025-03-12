@@ -36,36 +36,97 @@ module top(
         bram( .clk(clk), .data(randDistortion[i]),
               .readWrite(1), .addr(i), .out(dummyOutput));
     //3. Filter output read from BRAM
-        //First check edge cases
-        if( i == 1020) begin
-        
-        end
-        else if( i == 1021) begin
-        
-        end
-        else if( i == 1022) begin
-        
-        
-        end
-        else if( i == 1023) begin
-        
-        
-        end
-        //Checks for beginning of for loop
-        else if( i == 0) begin
-        
-        
+        //First check edge cases at the beginning of the for loop (0-4)
+        if( i == 0) begin
+            bram( .clk(clk), .data(0),
+                .readWrite(0), .addr(1020), .out(dirtyInputm4));
+            bram( .clk(clk), .data(0),
+                .readWrite(0), .addr(1021), .out(dirtyInputm3));
+            bram( .clk(clk), .data(0),
+                .readWrite(0), .addr(1022), .out(dirtyInputm2));
+            bram( .clk(clk), .data(0),
+                .readWrite(0), .addr(1023), .out(dirtyInputm1));
+            bram( .clk(clk), .data(0),
+                .readWrite(0), .addr(i), .out(dirtyInput));   
+                
+          filter(.clk(clk), .distortedInputm4(dirtyInputm4),
+                .distortedInputm3(dirtyInputm3),
+                .distortedInputm2(dirtyInputm2),
+                .distortedInputm1(dirtyInputm1),
+                .distortedInput(dirtyInput),
+                .filteredOutput(cleanOutput));
+               
+          bram(.clk(clk), .data(cleanOutput),
+                .readWrite(1), .addr(i), .out(dummyOutput));        
         end
         else if( i == 1) begin
-        
-        
+            bram( .clk(clk), .data(0),
+                .readWrite(0), .addr(1021), .out(dirtyInputm4));
+            bram( .clk(clk), .data(0),
+                .readWrite(0), .addr(1022), .out(dirtyInputm3));
+            bram( .clk(clk), .data(0),
+                .readWrite(0), .addr(1023), .out(dirtyInputm2));
+            bram( .clk(clk), .data(0),
+                .readWrite(0), .addr(i-1), .out(dirtyInputm1));
+            bram( .clk(clk), .data(0),
+                .readWrite(0), .addr(i), .out(dirtyInput));
+                    
+          filter(.clk(clk), .distortedInputm4(dirtyInputm4),
+                .distortedInputm3(dirtyInputm3),
+                .distortedInputm2(dirtyInputm2),
+                .distortedInputm1(dirtyInputm1),
+                .distortedInput(dirtyInput),
+                .filteredOutput(cleanOutput)
+);
+                
+          bram(.clk(clk), .data(cleanOutput),
+                .readWrite(1), .addr(i), .out(dummyOutput));
         end
         else if( i == 2) begin
-        
+            bram( .clk(clk), .data(0),
+                .readWrite(0), .addr(1022), .out(dirtyInputm4));
+            bram( .clk(clk), .data(0),
+                .readWrite(0), .addr(1023), .out(dirtyInputm3));
+            bram( .clk(clk), .data(0),
+                .readWrite(0), .addr(i-2), .out(dirtyInputm2));
+            bram( .clk(clk), .data(0),
+                .readWrite(0), .addr(i-1), .out(dirtyInputm1));
+            bram( .clk(clk), .data(0),
+                .readWrite(0), .addr(i), .out(dirtyInput));
+      
+          filter(.clk(clk), .distortedInputm4(dirtyInputm4),
+                .distortedInputm3(dirtyInputm3),
+                .distortedInputm2(dirtyInputm2),
+                .distortedInputm1(dirtyInputm1),
+                .distortedInput(dirtyInput),
+                .filteredOutput(cleanOutput)
+);
+                
+          bram(.clk(clk), .data(cleanOutput),
+                .readWrite(1), .addr(i), .out(dummyOutput));
         
         end
         else if( i == 3) begin
-        
+            bram( .clk(clk), .data(0),
+                  .readWrite(0), .addr(1023), .out(dirtyInputm4));
+            bram( .clk(clk), .data(0),
+                  .readWrite(0), .addr(i-3), .out(dirtyInputm3));
+            bram( .clk(clk), .data(0),
+                  .readWrite(0), .addr(i-2), .out(dirtyInputm2));
+            bram( .clk(clk), .data(0),
+                  .readWrite(0), .addr(i-1), .out(dirtyInputm1));
+            bram( .clk(clk), .data(0),
+                  .readWrite(0), .addr(i), .out(dirtyInput));
+    
+            filter(.clk(clk), .distortedInputm4(dirtyInputm4),
+                .distortedInputm3(dirtyInputm3),
+                .distortedInputm2(dirtyInputm2),
+                .distortedInputm1(dirtyInputm1),
+                .distortedInput(dirtyInput),
+                .filteredOutput(cleanOutput));
+
+            bram(.clk(clk), .data(cleanOutput),
+                .readWrite(1), .addr(i), .out(dummyOutput));
         
         end
         else begin
@@ -79,6 +140,7 @@ module top(
                 .readWrite(0), .addr(i-1), .out(dirtyInputm1));
           bram( .clk(clk), .data(0),
                 .readWrite(0), .addr(i), .out(dirtyInput));
+ 
           filter(.clk(clk), .distortedInputm4(dirtyInputm4),
                 .distortedInputm3(dirtyInputm3),
                 .distortedInputm2(dirtyInputm2),
@@ -87,10 +149,10 @@ module top(
  
                 .filteredOutput(cleanOutput)
 );
+                
           bram(.clk(clk), .data(cleanOutput),
                 .readWrite(1), .addr(i), .out(dummyOutput));
         end
-    //4. Store filtered output back into BRAM     
     end
     end
    
