@@ -18,14 +18,13 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
-
-
 module distort(
+    input clk,
     input [7:0] audioSample,
     output reg [7:0] distortedSample
     );
     reg [7:0] i, j;
-    initial begin
+    always@(posedge clk)begin
         i = $urandom % 10;
         j = $urandom % 5;
         if(i <= 5) begin
@@ -33,10 +32,6 @@ module distort(
         end
         else begin
            distortedSample <= audioSample - j;
-        end
-        
-        
-    end
-    
-    
+        end   
+    end 
 endmodule
