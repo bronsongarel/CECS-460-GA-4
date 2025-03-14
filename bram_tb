@@ -1,0 +1,114 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 03/13/2025 05:03:09 AM
+// Design Name: 
+// Module Name: bram_tb
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+
+module bram_tb();
+
+reg clk_tb, readWrite_tb;
+reg [7:0] data_tb, addr_tb;
+wire [7:0] out_tb;
+integer i;
+localparam period = 50;
+bram uut(.clk(clk_tb),.data(data_tb),
+        .readWrite(readWrite_tb),
+        .addr(addr_tb),.out(out_tb));
+
+initial begin
+        clk_tb = 0;
+        forever begin
+            clk_tb = ~clk_tb;
+            #50;
+        end
+end
+
+
+initial begin
+    data_tb = 8'b00000000;
+    addr_tb = 8'b00000000;
+    //Setting bram[addr] to different values than initial
+    //When RW = 1, the data will be read to into bram[addr]
+    readWrite_tb = 1; 
+    for (i = 0; i < 10; i = i + 1) begin  //will cycle through and test all address inputs
+        addr_tb = addr_tb + 8'b00000001; //write to addr i
+        data_tb = addr_tb + 8'b00000001; //data = addr+1
+        #100; 
+    end
+    //When RW = 0, the address will be read to out
+    readWrite_tb = 0; 
+    for (i = 0; i < 10; i = i + 1) begin  //will cycle through and test all address inputs
+        addr_tb = i ; //write to addr i
+        #100; 
+    end
+    /*
+   
+    data_tb = 8'b00000000;
+    addr_tb = 8'b00000000;
+    //When RW = 1, the data will be read to into bram[addr]
+    readWrite_tb = 1; 
+    for (i = 0; i < 5; i = i + 1) begin  //will cycle through and test all address inputs
+        data_tb = data_tb + 8'b00000001; //data = i
+        addr_tb = addr_tb + 8'b00000001; //write to addr i
+        #100; 
+    end
+
+
+//Test 1: readWrite = 0
+readWrite_tb = 0;
+    
+    //Test 1A: Data = 0
+    for (i = 0; i < 256; i = i + 1) begin  //will cycle through and test all address inputs
+        data_tb = 0; 
+        addr_tb[i] = i;            //with data = 0
+        #period;     
+    end
+    #1000; //long pause between tests
+
+    //Test 1B: Data contains info
+    for (i = 500; i < 756; i = i + 1) begin  //will cycle through and test all address inputs
+       data_tb = $random % 255;   //with random data
+       addr_tb[i] = i;
+       #period;     
+    end
+    #1000; //long pause between tests
+
+//Test 2: readWrite = 1
+    //Test 2A: Addr = 0 Tests
+    readWrite_tb = 1;
+    addr_tb = 0; 
+    for (i = 0; i < 256; i = i + 1) begin  //will cycle through and test all address inputs
+        data_tb[i] = 0;            //with data = 0
+        #period;     
+    end
+    #1000; //long pause between tests
+
+    //Test 2B: Addr contains value
+    for (i = 0; i < 256; i = i + 1) begin  //will cycle through and test all address inputs
+       addr_tb = $random % 255;   //with random data
+       data_tb[i] = i;
+       #period;     
+    end
+    #1000; //long pause between tests
+    
+    */
+end
+
+
+endmodule
