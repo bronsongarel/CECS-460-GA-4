@@ -1,11 +1,6 @@
 module filter(
     input clk,
-    input [7:0] distortedInputm4,
-    input [7:0] distortedInputm3,
-    input [7:0] distortedInputm2,
-    input [7:0] distortedInputm1,
-    input [7:0] distortedInput,
-
+    input [7:0] distortedInputm4, distortedInputm3, distortedInputm2, distortedInputm1,distortedInput,
     output reg [7:0] filteredOutput
 );
     parameter h0 = 1;
