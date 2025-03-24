@@ -1,0 +1,48 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 03/23/2025 10:37:52 AM
+// Design Name: 
+// Module Name: doEverything_tb
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+
+module doEverything_tb();
+reg clk_tb;
+reg [10:0] i_tb;
+wire [11:0] sineInput_tb, filteredOutput_tb, distortedOutput_tb, pipelineOutput_tb;
+doEverything uut(.clk(clk_tb), .i(i_tb), .sineInput(sineInput_tb),.distortedOutput(distortedOutput_tb), 
+                 .filteredOutput(filteredOutput_tb), .pipelineOutput(pipelineOutput_tb));
+                 
+initial begin
+        clk_tb = 0;
+        i_tb = 0;
+        forever begin
+            clk_tb = ~clk_tb;
+            #100;
+        end
+end
+
+always @(posedge clk_tb) begin
+    //$monitor("i = %d, filteredOutput = %d, distortedOutput = %d, pipelineOutput = %d",i_tb, filteredOutput_tb, distortedOutput_tb, pipelineOutput_tb);
+    $monitor("%d", sineInput_tb);
+    if(i_tb < 255) begin
+        i_tb <= i_tb + 1;
+    end
+end
+endmodule
+
+
